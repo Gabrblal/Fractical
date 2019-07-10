@@ -1,0 +1,122 @@
+#define GLEW_STATIC
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+#include "Vertex.hpp"
+#include "Shader.hpp"
+#include "Error.hpp"
+
+#define DEBUG true
+#define INIT_WIDTH 800
+#define INIT_HEIGHT 600
+
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void processInput(GLFWwindow *window);
+
+struct Settings {
+    struct {
+        GLint height;
+        GLint width;
+    } window;
+};
+
+int main()
+{
+
+    if (!glfwInit()) {
+        std::cout << "Failed to initalise GLFW" << std::endl;
+        return -1;
+    }
+    
+    // Despite the word "hint", glfwWindowHint sets configuration options.
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    if (DEBUG) {
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+    }
+
+    GLFWwindow *window = glfwCreateWindow(INIT_WIDTH, INIT_HEIGHT, "Fractical", NULL, NULL);
+    if (window == NULL) {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // Bind function when window changes size
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if (glewInit() != GLEW_OK) {
+        std::cout << "Failed to initialise GLEW" << std::endl;
+        return -1;
+    }
+
+    if (DEBUG) {
+        InitialiseDebugOutput();
+    }
+
+    float verticies[] = {
+        -0.5f, -0.5f,
+        -0.5f, 0.5f,
+        0.5f,  0.5f,
+        0.5f, -0.5f
+    };
+
+    unsigned int indicies[] = {
+        0,1,2,
+        2,3,0
+    };
+
+    VertexBuffer vb(sizeof(verticies), verticies, GL_STATIC_DRAW);
+    
+    VertexBufferLayout vbl;
+    vbl.PushBack(GL_FLOAT, 2);
+
+    VertexArray va;
+    va.AddBuffer(vb, vbl);
+
+    IndexBuffer ib(indicies, 6, GL_DYNAMIC_DRAW);
+    
+    Shader shader(mandelbrot_vs, mandelbrot_fs);
+    
+    shader.Bind();
+    va.Bind();
+    ib.Bind();
+
+    while(!glfwWindowShouldClose(window)) {
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        processInput(window);
+
+        // Render
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+
+    glfwTerminate();
+    return 0;
+
+}
+
+// When the framebuffer size changes, adjust the view port width as well
+void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height) {
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
