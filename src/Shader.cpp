@@ -5,24 +5,7 @@
 #include <sstream>
 #include <string>
 
-const char* mandelbrot_fs = R"(
-    #version 330 core
-    out vec4 FragColor;
-
-    void main()
-    {
-        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-    } 
-)";
-
-const char* mandelbrot_vs = R"(
-    #version 330 core
-    layout (location = 0) in vec3 aPos;
-
-    void main() {
-        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-    }
-)";
+/////////////////////////////////// Shader /////////////////////////////////////
 
 Shader::Shader(const char *vertex, const char *fragment)
     : m_id(0)
@@ -43,21 +26,6 @@ void Shader::Bind() const
 void Shader::Unbind() const
 {
     glUseProgram(0);
-}
-
-GLint Shader::GetUniformLocation(const char *name)
-{
-    if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end()) {
-        return m_uniform_location_cache[name];
-    }
-
-    GLint location = glGetUniformLocation(m_id, name);
-    if (location == -1) {
-        std::cout << "Shader Warning: Uniform " << name << " does not exist." << std::endl;
-    }
-    
-    m_uniform_location_cache[name] = location;
-    return location;
 }
 
 const char *Shader::ParseShader(const char *filepath)
@@ -140,3 +108,108 @@ GLuint Shader::CompileShader(const GLuint type, const char *source)
 
     return id;
 }
+
+GLint Shader::GetUniformLocation(const char *name)
+{
+    if (m_uniform_location_cache.find(name) != m_uniform_location_cache.end()) {
+        return m_uniform_location_cache[name];
+    }
+
+    GLint location = glGetUniformLocation(m_id, name);
+    if (location == -1) {
+        std::cout << "Shader Warning: Uniform " << name << " does not exist." << std::endl;
+    }
+    
+    m_uniform_location_cache[name] = location;
+    return location;
+}
+
+void Shader::SetUniform1f(const char *name, GLfloat f1)
+{
+    glUniform1f(GetUniformLocation(name), f1);
+}
+
+void Shader::SetUniform4f(const char *name, GLfloat f1, GLfloat f2, GLfloat f3, GLfloat f4)
+{
+    glUniform4f(GetUniformLocation(name), f1, f2, f3, f4);
+}
+
+///////////////////////////////// Fractal //////////////////////////////////////
+
+const char *Fractal::s_default_frag = R"(
+    #version 330 core
+    out vec4 FragColor;
+
+    uniform float u_x0;
+    uniform float u_y0;
+    uniform float u_x1;
+    uniform float u_y1;
+
+    void main()
+    {
+        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    } 
+)";
+
+const char *Fractal::s_default_vert = R"(
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+
+    void main() {
+        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    }
+)";
+
+Fractal::Fractal(Settings &settings)
+    : m_settings(&settings)
+    , Shader(s_default_frag, s_default_vert)
+{
+}
+
+void Fractal::InitUniforms() {
+    Bind();
+    SetUniform1f("u_x0", m_settings->window.x0);
+    SetUniform1f("u_y0", m_settings->window.y0);
+    SetUniform1f("u_x1", m_settings->window.x1);
+    SetUniform1f("u_y1", m_settings->window.y1);
+}
+
+void Fractal::Update() {
+    SetUniform1f("u_x0", m_settings->window.x0);
+    SetUniform1f("u_y0", m_settings->window.y0);
+    SetUniform1f("u_x1", m_settings->window.x1);
+    SetUniform1f("u_y1", m_settings->window.y1);
+    UpdateFractal();
+}
+
+/////////////////////////////// Mandelbrot /////////////////////////////////////
+
+Mandelbrot::Mandelbrot(Settings &settings)
+    : Shader(s_frag, s_vert)
+    , Fractal(settings)
+{
+}
+
+const char *Mandelbrot::s_frag = R"(
+    #version 330 core
+    out vec4 FragColor;
+
+    uniform float u_x0;
+    uniform float u_y0;
+    uniform float u_x1;
+    uniform float u_y1;
+    
+    void main()
+    {
+        FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    } 
+)";
+
+const char *Mandelbrot::s_vert =  R"(
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+
+    void main() {
+        gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    }
+)";

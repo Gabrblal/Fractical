@@ -18,13 +18,6 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
-struct Settings {
-    struct {
-        GLint height;
-        GLint width;
-    } window;
-};
-
 int main()
 {
 
@@ -85,8 +78,8 @@ int main()
     IndexBuffer ib(indicies, 6, GL_DYNAMIC_DRAW);
     
     Shader shader(mandelbrot_vs, mandelbrot_fs);
-    
     shader.Bind();
+    shader.SetUniform4f("u_winx", )
     va.Bind();
     ib.Bind();
 

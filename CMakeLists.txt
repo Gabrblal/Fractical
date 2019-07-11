@@ -1,11 +1,12 @@
 ##### Installing the C and C++ GNU compilers, using MinGW64:
 # http://www.mingw-w64.org/doku.php/download
-# Want to click on the sourceforge link to download the installer
-# Want to use 86_64 architexture with posix threading.
+# Click on the sourceforge link to download the installer
+# Use 86_64 architexture with posix threading for 64 bit machines
 #
+
 #### Setting up CMake:
 # To identify the CC and CXX compiler want to run the command
-# cmake -G "MinGW Makefiles" -D CMAKE_C_COMPILER=C:/MinGW64/mingw64/bin/gcc.exe CMAKE_CXX_COMPILER = c:/MinGW64/mingw65/bin/g++.exe .
+# cmake -G "MinGW Makefiles" -D CMAKE_C_COMPILER=c:/path/to/c/compiler/gcc.exe CMAKE_CXX_COMPILER = c:/path/to/c++/compiler/g++.exe .
 # These variables get stored in the CMakeCache.txt
 #
 # The dot at the end is the current directory for source files.
