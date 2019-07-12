@@ -43,48 +43,55 @@ class Shader
 
         // Returns the location of the given uniform, -1 if it does not exist
         GLint GetUniformLocation(const char *name);
+        std::unordered_map<const char*, GLint> m_uniform_location_cache;
+
+        GLuint m_id;
+
+    protected:
+
+        // For inherited null state initialisation
+        Shader();
 
         void SetUniform1f(const char *name, GLfloat f1);
         void SetUniform4f(const char *name, GLfloat f1, GLfloat f2, GLfloat f3, GLfloat f4);
 
-        GLuint m_id;
-        std::unordered_map<const char*, GLint> m_uniform_location_cache;
-
 };
 
-class Fractal : public Shader
+// A virtual class off which all fractals inherit. Defines initialisation for \
+// common uniforms and updating functions. Should never be instantiated directly.
+class Fractal : virtual public Shader
 {
-    static const char *s_default_frag;
-    static const char *s_default_vert;
+    protected:
 
-    public:
         Fractal(Settings &settings);
-        ~Fractal();
-    private:
 
+        Fractal(const Fractal&) = default;
+        Fractal &operator=(const Fractal&) = default;
+        
         // Initalises the uniforms used be all fractals, e.g. window coordinates
-        void InitUniforms();
+        virtual void InitUniforms();
 
-        // Updates the view of the fractal
+        // Updates the view of the fractal. Ensures window uniforms are always
+        // updated.
         void Update();
 
         // Updates any mathematics needed to render to fractal
-        virtual void UpdateFractal() = 0;
+        virtual void UpdateFractal() {};
 
         // To update uniforms
         Settings* m_settings;
+    
+    friend class FractalRenderer;
 };
 
-class Mandelbrot : public Fractal, public Shader
+class Mandelbrot : virtual public Fractal
 {
-    static const char * s_frag;
+    static const char *s_frag;
     static const char *s_vert;
     
     public:
         Mandelbrot(Settings &settings);
 
-    private:
-        void UpdateFractal() override {};
 };
  
 #endif // SHADER_H

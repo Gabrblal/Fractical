@@ -99,7 +99,7 @@ void VertexArray::Unbind() const {
     glBindVertexArray(0);
 }
 
-void VertexArray::AddBuffer(const VertexBuffer & vertexbuffer, const VertexBufferLayout& layout)
+void VertexArray::AddBuffer(const VertexBuffer &vertexbuffer, const VertexBufferLayout &layout)
 {
     // Bind this vertex array and the vertex buffer to add attributes to.
     Bind();

@@ -7,8 +7,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Vertex.hpp"
-#include "Shader.hpp"
+#include "FractalRenderer.hpp"
 #include "Error.hpp"
 
 #define DEBUG true
@@ -55,33 +54,11 @@ int main()
         InitialiseDebugOutput();
     }
 
-    float verticies[] = {
-        -0.5f, -0.5f,
-        -0.5f, 0.5f,
-        0.5f,  0.5f,
-        0.5f, -0.5f
+    Settings settings = {
+        -1,-1,1,1
     };
 
-    unsigned int indicies[] = {
-        0,1,2,
-        2,3,0
-    };
-
-    VertexBuffer vb(sizeof(verticies), verticies, GL_STATIC_DRAW);
-    
-    VertexBufferLayout vbl;
-    vbl.PushBack(GL_FLOAT, 2);
-
-    VertexArray va;
-    va.AddBuffer(vb, vbl);
-
-    IndexBuffer ib(indicies, 6, GL_DYNAMIC_DRAW);
-    
-    Shader shader(mandelbrot_vs, mandelbrot_fs);
-    shader.Bind();
-    shader.SetUniform4f("u_winx", )
-    va.Bind();
-    ib.Bind();
+    FractalRenderer renderer(settings);
 
     while(!glfwWindowShouldClose(window)) {
 
@@ -90,7 +67,7 @@ int main()
         processInput(window);
 
         // Render
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        renderer.Render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

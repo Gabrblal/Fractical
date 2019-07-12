@@ -6,11 +6,16 @@
 
 struct Settings {
     struct {
-        GLint x0;
-        GLint y0;
-        GLint x1;
-        GLint y1;
+        GLfloat x0;
+        GLfloat y0;
+        GLfloat x1;
+        GLfloat y1;
     } window;
+};
+
+enum class FractalType {
+    Default = 0,
+    Mandelbrot = 1,
 };
 
 #endif // DEFS_H
