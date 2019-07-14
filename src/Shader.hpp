@@ -14,9 +14,6 @@
 // unsigned int CompileShader(const unsigned int type, const char *source);
 // unsigned int CreateProgram(const char *vertexShader, const char *fragmentShader);
 
-extern const char* mandelbrot_fs;
-extern const char* mandelbrot_vs;
-
 class Shader
 {
     public:
@@ -41,33 +38,32 @@ class Shader
         // checking. Returns the programs ID
         GLuint CreateProgram(const char *vertex, const char *fragment);
 
+    protected:
+    
         // Returns the location of the given uniform, -1 if it does not exist
         GLint GetUniformLocation(const char *name);
         std::unordered_map<const char*, GLint> m_uniform_location_cache;
-
+    
+    public:
         GLuint m_id;
-
     protected:
-
-        // For inherited null state initialisation
-        Shader();
 
         void SetUniform1f(const char *name, GLfloat f1);
         void SetUniform4f(const char *name, GLfloat f1, GLfloat f2, GLfloat f3, GLfloat f4);
 
 };
 
-// A virtual class off which all fractals inherit. Defines initialisation for \
-// common uniforms and updating functions. Should never be instantiated directly.
 class Fractal : virtual public Shader
 {
-    protected:
+    static const char *s_default_vert;
+    static const char *s_default_frag;
+
+    public:
 
         Fractal(Settings &settings);
+    
+    protected:
 
-        Fractal(const Fractal&) = default;
-        Fractal &operator=(const Fractal&) = default;
-        
         // Initalises the uniforms used be all fractals, e.g. window coordinates
         virtual void InitUniforms();
 
@@ -84,7 +80,7 @@ class Fractal : virtual public Shader
     friend class FractalRenderer;
 };
 
-class Mandelbrot : virtual public Fractal
+class Mandelbrot : virtual public Shader, virtual public Fractal
 {
     static const char *s_frag;
     static const char *s_vert;

@@ -25,6 +25,10 @@ FractalRenderer::FractalRenderer(Settings &settings)
 
     m_vertex_array.Bind();
     m_index_buffer.Bind();
+
+    std::cout << "Binding in renderer is " << m_fractal_shader.m_id << std::endl;
+    std::cout << "is program: " << (int)glIsProgram(m_fractal_shader.m_id) << std::endl;
+    m_fractal_shader.Bind();
 }
 
 void FractalRenderer::SelectFractal(FractalType type)
