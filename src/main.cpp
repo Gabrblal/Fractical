@@ -11,11 +11,17 @@
 #include "Error.hpp"
 
 #define DEBUG true
-#define INIT_WIDTH 1980
-#define INIT_HEIGHT 1080
+#define WINDOW_WIDTH 1980
+#define WINDOW_HEIGHT 1080
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+
+static Settings settings = {
+    WINDOW_WIDTH, WINDOW_HEIGHT,
+    -2.0, -1.0,
+    1, 1
+};
 
 int main()
 {
@@ -34,7 +40,7 @@ int main()
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     }
 
-    GLFWwindow *window = glfwCreateWindow(INIT_WIDTH, INIT_HEIGHT, "Fractical", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Fractical", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -53,11 +59,6 @@ int main()
     if (DEBUG) {
         InitialiseDebugOutput();
     }
-
-    Settings settings = {
-        -2, 2,
-         -2, 2
-    };
 
     FractalRenderer renderer(settings);
 
@@ -87,7 +88,22 @@ void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height) {
 }
 
 void processInput(GLFWwindow *window) {
+    
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    }
+
+    else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        settings.window.y0 += 0.01;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        settings.window.y0 -= 0.01;
+    }
+    
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        settings.window.x0 += 0.01;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        settings.window.x0 -= 0.01;
     }
 }

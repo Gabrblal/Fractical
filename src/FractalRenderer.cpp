@@ -15,8 +15,8 @@ GLuint FractalRenderer::m_index_carray[] = {
 };
 
 FractalRenderer::FractalRenderer(Settings &settings)
-    : m_settings(settings)
-    , m_current_fractal(Mandelbrot(m_settings))
+    : m_settings(&settings)
+    , m_current_fractal(Mandelbrot(settings))
     , m_vertex_buffer_layout()
     , m_vertex_buffer(sizeof(m_device_verticies_carray), m_device_verticies_carray, GL_DYNAMIC_DRAW)
     , m_vertex_array()
@@ -40,7 +40,7 @@ void FractalRenderer::SelectFractal(FractalType type)
 
     switch (type)
     {
-        case FractalType::Mandel : m_current_fractal = Mandelbrot(m_settings); break;
+        case FractalType::Mandel : m_current_fractal = Mandelbrot(*m_settings); break;
         default : {
             std::cout << "Unknown fractal type!" << std::endl;
             return;

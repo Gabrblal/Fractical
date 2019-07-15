@@ -6,10 +6,16 @@
 
 struct Settings {
     struct {
+        struct {
+            GLfloat width;
+            GLfloat height;
+        } resolution;
+
         GLfloat x0;
-        GLfloat x1;
         GLfloat y0;
-        GLfloat y1;
+        GLfloat x;
+        GLfloat y;
+
     } window;
 };
 

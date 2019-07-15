@@ -27,7 +27,7 @@ class FractalRenderer
         void Render();
 
     private:
-        Settings m_settings;
+        Settings* m_settings;
         Fractal m_current_fractal;
 
         VertexBufferLayout m_vertex_buffer_layout;

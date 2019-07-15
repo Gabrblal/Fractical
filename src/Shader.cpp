@@ -161,12 +161,12 @@ const char *Fractal::s_default_frag =  R"(
     #version 330 core
     out vec4 FragColor;
 
+    uniform float u_width;
+    uniform float u_height;
     uniform float u_x0;
     uniform float u_y0;
-    uniform float u_x1;
-    uniform float u_y1;
-
-    float c = u_x0 + u_y0 + u_x1 + u_y1;
+    uniform float u_x;
+    uniform float u_y;
     
     void main()
     {
@@ -185,17 +185,22 @@ Fractal::Fractal(Settings &settings)
 }
 
 void Fractal::InitUniforms() {
+    SetUniform1f("u_width", m_settings->window.resolution.width);
+    SetUniform1f("u_height", m_settings->window.resolution.height);
     SetUniform1f("u_x0", m_settings->window.x0);
     SetUniform1f("u_y0", m_settings->window.y0);
-    SetUniform1f("u_x1", m_settings->window.x1);
-    SetUniform1f("u_y1", m_settings->window.y1);
+    SetUniform1f("u_x", m_settings->window.x);
+    SetUniform1f("u_y", m_settings->window.y);
 }
 
 void Fractal::Update() {
+    std::cout << m_settings->window.x0;
+    SetUniform1f("u_width", m_settings->window.resolution.width);
+    SetUniform1f("u_height", m_settings->window.resolution.height);
     SetUniform1f("u_x0", m_settings->window.x0);
     SetUniform1f("u_y0", m_settings->window.y0);
-    SetUniform1f("u_x1", m_settings->window.x1);
-    SetUniform1f("u_y1", m_settings->window.y1);
+    SetUniform1f("u_x", m_settings->window.x);
+    SetUniform1f("u_y", m_settings->window.y);
     UpdateFractal();
 }
 
@@ -226,10 +231,12 @@ const char *Mandelbrot::s_frag = R"(
 
     out vec4 FragColor;
 
+    uniform float u_width;
+    uniform float u_height;
     uniform float u_x0;
     uniform float u_y0;
-    uniform float u_x1;
-    uniform float u_y1;
+    uniform float u_x;
+    uniform float u_y;
 
     float mandelbrot(in float x0, in float y0, out int iterations)
     {
@@ -252,8 +259,8 @@ const char *Mandelbrot::s_frag = R"(
     
     void main()
     {
-        float x = u_x0 + (u_x1 - u_x0) * (gl_FragCoord.x / 1920); 
-        float y = u_y0 + (u_y1 - u_y0) * (gl_FragCoord.y * 9 / 1080 / 16);
+        float x = u_x0 + u_x * (gl_FragCoord.x / u_width); 
+        float y = u_y0 + u_y * (gl_FragCoord.y * u_height / 1080 / u_width);
 
         int iterations;
         mandelbrot(x, y, iterations);
