@@ -6,7 +6,7 @@
 
 #### Setting up CMake:
 # To identify the CC and CXX compiler want to run the command
-# cmake -G "MinGW Makefiles" -D CMAKE_C_COMPILER=c:/path/to/c/compiler/gcc.exe CMAKE_CXX_COMPILER = c:/path/to/c++/compiler/g++.exe .
+# cmake -G "MinGW Makefiles" -D CMAKE_C_COMPILER=gcc CMAKE_CXX_COMPILER=g++ .
 # These variables get stored in the CMakeCache.txt
 #
 # The dot at the end is the current directory for source files.
@@ -16,7 +16,7 @@
 # To check location of compilers on linux use "which [g++/gcc]"
 
 cmake_minimum_required(VERSION 3.13)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ../bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
 ################################## GLFW ########################################
 
@@ -63,3 +63,8 @@ target_link_directories(fractical PUBLIC ${GLEW_LINK_DIR})
 
 # Define the libraries for linking. glfw and OpenGL are defined in the glfw CMakeLists
 target_link_libraries(fractical PUBLIC glew32s glfw ${GLFW_LIBRARIES} OpenGL::GL)
+
+# Add compiler flags
+target_compile_options(fractical
+    PUBLIC -g -std=c++17 -Wall -Werror
+)

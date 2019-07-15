@@ -7,15 +7,15 @@
 struct Settings {
     struct {
         GLfloat x0;
-        GLfloat y0;
         GLfloat x1;
+        GLfloat y0;
         GLfloat y1;
     } window;
 };
 
-enum class FractalType {
+enum FractalType {
     Default = 0,
-    Mandelbrot = 1,
+    Mandel = 1,
 };
 
 #endif // DEFS_H

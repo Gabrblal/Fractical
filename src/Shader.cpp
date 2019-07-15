@@ -11,12 +11,20 @@ Shader::Shader(const char *vertex, const char *fragment)
     : m_id(0)
 {
     m_id = CreateProgram(vertex, fragment);
-    std::cout << "Program ID is " << m_id << std::endl;
 }
 
 Shader::~Shader()
 {
-    std::cout << "deleting" << std::endl;
+    // BUG: Creating temporary instances of Shader invokes the destructor that
+    // deletes the program, making the new Shader object unusable.
+    // See Shader::Destroy()
+
+    // glDeleteProgram(m_id);
+}
+
+void Shader::Destroy()
+{
+    // Call this manually for destroying the shader, in the renderer.
     glDeleteProgram(m_id);
 }
 
@@ -167,8 +175,8 @@ const char *Fractal::s_default_frag =  R"(
 )";
 
 Fractal::Fractal(Settings &settings)
-    : m_settings(&settings)
-    , Shader(s_default_vert, s_default_frag)
+    : Shader(s_default_vert, s_default_frag)
+    , m_settings(&settings)
 {
     std::cout << "Binding and unbinding in Fractal Constructor" << std::endl;
     Bind();
@@ -244,8 +252,8 @@ const char *Mandelbrot::s_frag = R"(
     
     void main()
     {
-        float x = (u_x1 - u_x0) / 1920;
-        float y = (u_y1 - u_y0) / 1120;
+        float x = u_x0 + (u_x1 - u_x0) * (gl_FragCoord.x / 1920); 
+        float y = u_y0 + (u_y1 - u_y0) * (gl_FragCoord.y * 9 / 1080 / 16);
 
         int iterations;
         mandelbrot(x, y, iterations);

@@ -11,8 +11,8 @@
 #include "Error.hpp"
 
 #define DEBUG true
-#define INIT_WIDTH 800
-#define INIT_HEIGHT 600
+#define INIT_WIDTH 1980
+#define INIT_HEIGHT 1080
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -55,7 +55,8 @@ int main()
     }
 
     Settings settings = {
-        -1,-1,1,1
+        -2, 2,
+         -2, 2
     };
 
     FractalRenderer renderer(settings);
