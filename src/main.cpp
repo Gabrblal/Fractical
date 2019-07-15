@@ -94,16 +94,25 @@ void processInput(GLFWwindow *window) {
     }
 
     else if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-        settings.window.y0 += 0.01;
+        settings.window.y0 += settings.window.y * 0.02;
     }
     else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        settings.window.y0 -= 0.01;
+        settings.window.y0 -= settings.window.y * 0.02;
     }
     
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        settings.window.x0 += 0.01;
+        settings.window.x0 += settings.window.x * 0.02;
     }
     else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        settings.window.x0 -= 0.01;
+        settings.window.x0 -= settings.window.x * 0.02;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_EQUAL) == GLFW_PRESS) {
+        settings.window.x *= 0.95;
+        settings.window.y *= 0.95;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_MINUS) == GLFW_PRESS) {
+        settings.window.x *= 1.05;
+        settings.window.y *= 1.05;
     }
 }

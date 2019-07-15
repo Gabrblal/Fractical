@@ -194,7 +194,6 @@ void Fractal::InitUniforms() {
 }
 
 void Fractal::Update() {
-    std::cout << m_settings->window.x0;
     SetUniform1f("u_width", m_settings->window.resolution.width);
     SetUniform1f("u_height", m_settings->window.resolution.height);
     SetUniform1f("u_x0", m_settings->window.x0);
@@ -238,7 +237,7 @@ const char *Mandelbrot::s_frag = R"(
     uniform float u_x;
     uniform float u_y;
 
-    float mandelbrot(in float x0, in float y0, out int iterations)
+    float mandelbrot(in float x0, in float y0, out float iterations)
     {
         iterations = 0;
 
@@ -253,7 +252,12 @@ const char *Mandelbrot::s_frag = R"(
             iterations++;
         }
 
-        return iterations;
+        if (iterations == MAX_ITERATIONS) {
+            return iterations;
+        }
+        else {
+            return iterations + 1 - log(log2(x*x + y*y));
+        }
     
     }
     
@@ -262,7 +266,7 @@ const char *Mandelbrot::s_frag = R"(
         float x = u_x0 + u_x * (gl_FragCoord.x / u_width); 
         float y = u_y0 + u_y * (gl_FragCoord.y * u_height / 1080 / u_width);
 
-        int iterations;
+        float iterations;
         mandelbrot(x, y, iterations);
         float normalised = iterations / MAX_ITERATIONS;
 
