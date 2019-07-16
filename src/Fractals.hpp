@@ -34,13 +34,13 @@ class Fractal : virtual public Shader
         // Default fractal shaders used for debugging.
         static const char *s_default_vert;
         static const char *s_default_frag;
-        
+
         struct {
             GLfloat width = 1920.0;
             GLfloat height = 1080.0;
             GLfloat x0 = -1.0;
             GLfloat y0 = -1.0;
-            GLfloat x = 2.0;
+            GLfloat x = 3.0;
             GLfloat y = 2.0;
         } s_default_settings;
 };
@@ -52,7 +52,18 @@ class Mandelbrot : virtual public Shader, virtual public Fractal
     
     public:
         Mandelbrot();
+        
+};
 
+class Julia : virtual public Shader, virtual public Fractal
+{
+    static const char *s_frag;
+    static const char *s_vert;
+
+    public:
+        Julia();
+        void InitFractal() override;
+        void UpdateFractal() override;
 };
 
 #endif // FRACTALS_H

@@ -2,6 +2,7 @@
 bin/*
 build/*
 lib/*
+spike/*
 
 # VS Code
 .vscode/

@@ -78,7 +78,6 @@ const char *Mandelbrot::s_vert =  R"(
 const char *Mandelbrot::s_frag = R"(
     #version 330 core
     
-    #define PI 3.14159
     const int MAX_ITERATIONS = 100;
 
     out vec4 FragColor;
@@ -97,13 +96,30 @@ const char *Mandelbrot::s_frag = R"(
         float x = 0;
         float y = 0;
 
-        while ((x*x + y*y <= 4) && (iterations < MAX_ITERATIONS))
+        float rsquare = 0;
+        float isquare = 0;
+        float zsquare = 0;
+
+        // https://en.wikipedia.org/wiki/Mandelbrot_set#Escape_time_algorithm
+        
+        while ((rsquare + isquare <= 4) && (iterations < MAX_ITERATIONS))
         {
-            float x_temp = x*x - y*y + x0;
-            y = 2*x*y + y0;
-            x = x_temp;
+            x = rsquare - isquare + x0;
+            y = zsquare - rsquare - isquare + y0;
+            rsquare = x*x;
+            isquare = y*y;
+            zsquare = (x + y) * (x + y);
             iterations++;
         }
+
+        // TODO: Implement Multibrots
+        // while ((x*x + y*y <= 4) && (iterations < MAX_ITERATIONS))
+        // {
+        //     float xtemp = pow( (x*x + y*y), u_n/2) * cos(u_n * pow(atan(y, x), 2)) + x0;
+        //     y = pow( (x*x + y*y), u_n/2) * sin(u_n * pow(atan(y, x), 2)) + y0;
+        //     x = xtemp;
+        //     iterations++;
+        // }
 
         if (iterations == MAX_ITERATIONS) {
             return iterations;
@@ -116,13 +132,94 @@ const char *Mandelbrot::s_frag = R"(
     
     void main()
     {
-        float x = u_x0 + u_x * (gl_FragCoord.x / u_width); 
-        float y = u_y0 + u_y * (gl_FragCoord.y * u_height / 1080 / u_width);
+        float x = u_x0 + u_x * (gl_FragCoord.x / u_width);
+        float y = u_y0 + u_y * (gl_FragCoord.y / u_width);
 
         float iterations;
         mandelbrot(x, y, iterations);
         float normalised = iterations / MAX_ITERATIONS;
 
+        FragColor = vec4(normalised, normalised, normalised, normalised);
+    } 
+)";
+
+Julia::Julia()
+    : Shader(s_vert, s_frag)
+    , Fractal()
+{
+}
+
+void Julia::InitFractal()
+{
+    SetUniform1f("u_cx", 0.0);
+    SetUniform1f("u_cy", 1.0);
+}
+
+void Julia::UpdateFractal()
+{
+
+}
+
+const char *Julia::s_vert =  R"(
+    #version 330 core
+    layout (location = 0) in vec3 aPos;
+
+    out gl_PerVertex { vec4 gl_Position; };
+
+    void main() {
+        gl_Position = vec4(aPos, 1.0);
+    }
+)";
+
+const char *Julia::s_frag = R"(
+     #version 330 core
+    
+    const int MAX_ITERATIONS = 100;
+
+    out vec4 FragColor;
+
+    uniform float u_width;
+    uniform float u_height;
+    uniform float u_x0;
+    uniform float u_y0;
+    uniform float u_x;
+    uniform float u_y;
+
+    uniform float u_cx;
+    uniform float u_cy;
+
+    float julia(in float x0, in float y0, out float iterations)
+    {
+        iterations = 0;
+        float x = x0;
+        float y = y0;
+
+        while ((x*x + y*y <= 4) && (iterations < MAX_ITERATIONS))
+        {
+            float xtemp = (x*x) - (y*y) + u_cx;
+            y = 2.0*x*y + u_cy;
+            x = xtemp;
+            iterations++;
+        }
+
+        if (iterations == MAX_ITERATIONS) {
+            return 0.0;
+        }
+        else {
+            return iterations;
+        }
+    }
+    
+    void main()
+    {
+        float x = u_x0 + u_x * (gl_FragCoord.x / u_width);
+        float y = u_y0 + u_y * (gl_FragCoord.y / u_width);
+
+        float iterations;
+        julia(x, y, iterations);
+        float normalised = iterations / MAX_ITERATIONS;
+
+        // FragColor = vec4(0.0, 0.0, 1.0, 0.0);
         FragColor = vec4(normalised, normalised, normalised, normalised);
     } 
 )";

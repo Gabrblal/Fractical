@@ -20,8 +20,9 @@ struct Settings {
 };
 
 enum FractalType {
-    Default = 0,
-    Mandel = 1,
+    DEFAULT = 0,
+    MANDELBROT = 1,
+    JULIA = 2
 };
 
 #endif // DEFS_H
