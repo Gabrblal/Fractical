@@ -1,31 +1,31 @@
 #include "Fractals.hpp"
 
-Fractal::Fractal(Settings &settings)
+Fractal::Fractal()
     : Shader(s_default_vert, s_default_frag)
-    , m_settings(&settings)
 {
     Bind();
-    InitUniforms();
+    SetWindowResolution(s_default_settings.width, s_default_settings.height);
+    SetWindowCoordinates(s_default_settings.x0, s_default_settings.y0);
+    SetCartesianValues(s_default_settings.x, s_default_settings.y);
     Unbind();
 }
 
-void Fractal::InitUniforms() {
-    SetUniform1f("u_width", m_settings->window.resolution.width);
-    SetUniform1f("u_height", m_settings->window.resolution.height);
-    SetUniform1f("u_x0", m_settings->window.x0);
-    SetUniform1f("u_y0", m_settings->window.y0);
-    SetUniform1f("u_x", m_settings->window.x);
-    SetUniform1f("u_y", m_settings->window.y);
+void Fractal::SetWindowResolution(GLfloat width, GLfloat height)
+{
+    SetUniform1f("u_width", width);
+    SetUniform1f("u_height", height);
 }
 
-void Fractal::Update() {
-    SetUniform1f("u_width", m_settings->window.resolution.width);
-    SetUniform1f("u_height", m_settings->window.resolution.height);
-    SetUniform1f("u_x0", m_settings->window.x0);
-    SetUniform1f("u_y0", m_settings->window.y0);
-    SetUniform1f("u_x", m_settings->window.x);
-    SetUniform1f("u_y", m_settings->window.y);
-    UpdateFractal();
+void Fractal::SetWindowCoordinates(GLfloat x0, GLfloat y0)
+{
+    SetUniform1f("u_x0", x0);
+    SetUniform1f("u_y0", y0);
+}
+
+void Fractal::SetCartesianValues(GLfloat x, GLfloat y)
+{
+    SetUniform1f("u_x", x);
+    SetUniform1f("u_y", y);
 }
 
 const char *Fractal::s_default_vert = R"(
@@ -58,9 +58,9 @@ const char *Fractal::s_default_frag =  R"(
 
 /////////////////////////////// Mandelbrot /////////////////////////////////////
 
-Mandelbrot::Mandelbrot(Settings &settings)
+Mandelbrot::Mandelbrot()
     : Shader(s_vert, s_frag)
-    , Fractal(settings)
+    , Fractal()
 {
 }
 

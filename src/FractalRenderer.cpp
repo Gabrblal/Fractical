@@ -16,7 +16,7 @@ GLuint FractalRenderer::m_index_carray[] = {
 
 FractalRenderer::FractalRenderer(Settings &settings)
     : m_settings(&settings)
-    , m_current_fractal(Mandelbrot(settings))
+    , m_current_fractal(Mandelbrot())
     , m_vertex_buffer_layout()
     , m_vertex_buffer(sizeof(m_device_verticies_carray), m_device_verticies_carray, GL_DYNAMIC_DRAW)
     , m_vertex_array()
@@ -27,7 +27,12 @@ FractalRenderer::FractalRenderer(Settings &settings)
 
     m_vertex_array.Bind();
     m_index_buffer.Bind();
+
     m_current_fractal.Bind();
+    m_current_fractal.SetWindowResolution(
+        m_settings->window.resolution.width,
+        m_settings->window.resolution.height
+    );
 }
 
 FractalRenderer::~FractalRenderer()
@@ -37,21 +42,28 @@ FractalRenderer::~FractalRenderer()
 
 void FractalRenderer::SelectFractal(FractalType type)
 {
+    m_current_fractal.Destroy();
 
     switch (type)
     {
-        case FractalType::Mandel : m_current_fractal = Mandelbrot(*m_settings); break;
+        case FractalType::Mandel : m_current_fractal = Mandelbrot(); break;
         default : {
             std::cout << "Unknown fractal type!" << std::endl;
             return;
         }
     }
 
-    m_current_fractal.Destroy();
+    m_current_fractal.Bind();
+
+    m_current_fractal.SetWindowResolution(
+        m_settings->window.resolution.width,
+        m_settings->window.resolution.height
+    );
 }
 
 void FractalRenderer::Render()
 {
-    m_current_fractal.Update();
+    m_current_fractal.SetWindowCoordinates(m_settings->window.x0, m_settings->window.y0);
+    m_current_fractal.SetCartesianValues(m_settings->window.x, m_settings->window.y);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }

@@ -1,6 +1,9 @@
 #ifndef FRACTALS_H
 #define FRACTALS_H
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include "defs.hpp"
 #include "Shader.hpp"
 
@@ -9,30 +12,37 @@ class Fractal : virtual public Shader
 {
     friend class FractalRenderer;
 
+
     public:
-        Fractal(Settings &settings);
+        Fractal();
     
     protected:
 
-        // Initalises the uniforms used be all fractals e.g. window coordinates
-        virtual void InitUniforms();
-
-        // Updates the view of the fractal. Ensures window coordinate / screen
-        // size uniforms are always updated.
-        void Update();
+        // Override to initalise custom uniforms for the fractal
+        virtual void InitFractal() {};
 
         // Override this function to update uniforms that change the fractal.
         // Likely called every render.
         virtual void UpdateFractal() {};
 
-        // Used to update x,y window uniforms
-        Settings* m_settings;
+        void SetWindowResolution(GLfloat width, GLfloat height);
+        void SetWindowCoordinates(GLfloat x0, GLfloat y0);
+        void SetCartesianValues(GLfloat x, GLfloat y);
     
     private:
 
         // Default fractal shaders used for debugging.
         static const char *s_default_vert;
         static const char *s_default_frag;
+        
+        struct {
+            GLfloat width = 1920.0;
+            GLfloat height = 1080.0;
+            GLfloat x0 = -1.0;
+            GLfloat y0 = -1.0;
+            GLfloat x = 2.0;
+            GLfloat y = 2.0;
+        } s_default_settings;
 };
 
 class Mandelbrot : virtual public Shader, virtual public Fractal
@@ -41,7 +51,7 @@ class Mandelbrot : virtual public Shader, virtual public Fractal
     static const char *s_vert;
     
     public:
-        Mandelbrot(Settings &settings);
+        Mandelbrot();
 
 };
 
