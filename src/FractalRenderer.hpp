@@ -6,18 +6,15 @@
 
 #include "defs.hpp"
 #include "Vertex.hpp"
-#include "Shader.hpp"
+#include "Fractals.hpp"
 
 #include <unordered_map>
-#include <memory>
 
+// Handles rendering the various fractals defined in Fractals.cpp
 class FractalRenderer
 {
     static GLfloat m_device_verticies_carray[];
     static GLuint m_index_carray[];
-
-    // Redefining a single fractal reference is not possible since temporaries
-    // call the destructure that deletes the shader on the GPU side.
 
     public:
         FractalRenderer(Settings &settings);
