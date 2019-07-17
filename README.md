@@ -1,9 +1,7 @@
 # Fractical
------------
 A hobby project to implement viewing, zooming and exploration of various fractals in OpenGL.
 
 ## Dependancies
----------------
 
 #### GLFW
 [GLFW](https://www.glfw.org/) (Graphics Library Framework) is used for window creation and event handling. The GLFW license can be found [here](https://www.glfw.org/license.html).
