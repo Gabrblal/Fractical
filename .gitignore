@@ -4,14 +4,6 @@ build/*
 lib/*
 spike/*
 
-# VS Code
-.vscode/
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt
