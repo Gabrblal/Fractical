@@ -19,7 +19,7 @@ void processInput(GLFWwindow *window);
 
 static Settings settings = {
     WINDOW_WIDTH, WINDOW_HEIGHT,
-    -2.0, -1.0,
+    -3.0, 0,
     1, 1
 };
 

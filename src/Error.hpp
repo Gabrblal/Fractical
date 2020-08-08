@@ -4,6 +4,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+#ifndef WIN32
+#define __stdcall
+#endif
+
 // Function to bind to glDebugMessageCallback to receive debugging messages from
 // the GL. This function will be called whenever a debug message is generated
 void __stdcall glDebugOutput(GLenum source,

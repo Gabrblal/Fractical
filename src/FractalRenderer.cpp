@@ -16,7 +16,7 @@ GLuint FractalRenderer::m_index_carray[] = {
 
 FractalRenderer::FractalRenderer(Settings &settings)
     : m_settings(&settings)
-    , m_current_fractal(Julia())
+    , m_current_fractal(Mandelbrot())
     , m_vertex_buffer_layout()
     , m_vertex_buffer(sizeof(m_device_verticies_carray), m_device_verticies_carray, GL_DYNAMIC_DRAW)
     , m_vertex_array()
