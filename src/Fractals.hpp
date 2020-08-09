@@ -2,7 +2,7 @@
 #define FRACTALS_H
 
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include "GL/glew.h"
 
 #include "defs.hpp"
 #include "Shader.hpp"

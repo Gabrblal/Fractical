@@ -76,7 +76,6 @@ GLuint Shader::CreateProgram(const char *vertex, const char *fragment)
 
         delete[] message;
         return 0;
-
     }
 
     glDeleteShader(vs);

@@ -2,7 +2,7 @@
 #define ERROR_H
 
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include "GL/glew.h"
 
 #ifndef WIN32
 #define __stdcall

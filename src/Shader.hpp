@@ -2,7 +2,7 @@
 #define SHADER_H
 
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include "GL/glew.h"
 
 #include <unordered_map>
 
@@ -53,7 +53,6 @@ class Shader
 
         void SetUniform1f(const char *name, GLfloat f1);
         void SetUniform4f(const char *name, GLfloat f1, GLfloat f2, GLfloat f3, GLfloat f4);
-
 };
  
 #endif // SHADER_H

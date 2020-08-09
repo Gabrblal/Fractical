@@ -4,7 +4,6 @@
 
 VertexBuffer::VertexBuffer(GLsizeiptr size, const void* data, GLenum usage)
 {
-    
     // Generate a single new VBO
     glGenBuffers(1, &m_id);
 

@@ -2,7 +2,7 @@
 #define VERTEX_H
 
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include "GL/glew.h"
 
 #include <vector>
 
@@ -39,7 +39,6 @@ class IndexBuffer {
         //         GL_STREAM_DRAW, GL_STREAM_READ, GL_STREAM_COPY,
         //         GL_DYNAMIC_DRAW, GL_DYNAMIC_READ, GL_DYNAMIC_COPY        
         IndexBuffer(const GLuint *data, unsigned int count, GLenum usage); 
-       
         ~IndexBuffer();
 
         void Bind() const;
@@ -65,7 +64,6 @@ class VertexBufferLayout {
     // Contains information of the layout of a vertex buffer. Each vertex has
     // attributes (such as position, colour, etc) that may differ between buffers.
     // This class is used to construct a layout of a buffer.
-
 
     public:
 
@@ -106,11 +104,10 @@ class VertexArray
         void Bind() const;
         void Unbind() const;
 
-        void AddBuffer(const VertexBuffer & vertexbuffer, const VertexBufferLayout& layout);
+        void AddBuffer(const VertexBuffer &vertexbuffer, const VertexBufferLayout& layout);
 
     private:
         GLuint m_id;
-
 };
 
 #endif // VERTEX_H

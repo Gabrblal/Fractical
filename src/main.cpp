@@ -1,7 +1,6 @@
 #define GLEW_STATIC
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include <iostream>
 #include <chrono>
@@ -74,7 +73,7 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(std::chrono::milliseconds(15));
     }
 
     glfwTerminate();
