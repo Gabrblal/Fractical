@@ -23,6 +23,8 @@
 # GNU/Linux:
 #   sudo apt-get install cmake
 
+# TODO: Fix windows compiling with precompiled binaries.
+
 cmake_minimum_required(VERSION 3.13)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
 
