@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Fractical: Rebuild",
+            "label": "Fractical: Configure",
             "type": "shell",
             "problemMatcher": "",
             "command": "cmake",
@@ -15,7 +15,7 @@
             "group": "build"
         },
         {
-            "label": "Fractical: Compile",
+            "label": "Fractical: Build",
             "type":"shell",
             "problemMatcher": ["$gcc"],
             "command": "make"

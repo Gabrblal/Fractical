@@ -23,3 +23,7 @@ wide).
 For windows, compiling is currently broken due to GLEW. Eventually will need to
 download the windows precompiled binaries and change CMakeLists to detect
 windows and assume those binaries are present.
+
+After installing, press F7 for available tasks for reconfiguring (required to
+register new files), building the executable and running Fractical without a
+debugger. Press F5 to start the debugger on the current executable.
