@@ -4,6 +4,7 @@
         {
             "label": "Fractical: Rebuild",
             "type": "shell",
+            "problemMatcher": "",
             "command": "cmake",
             "args": [
                 "."
@@ -16,11 +17,13 @@
         {
             "label": "Fractical: Compile",
             "type":"shell",
+            "problemMatcher": ["$gcc"],
             "command": "make"
         },
         {
             "label": "Fractical: Run",
             "type": "shell",
+            "problemMatcher": "",
             "command":"${workspaceFolder}/bin/fractical"
         }
     ]
